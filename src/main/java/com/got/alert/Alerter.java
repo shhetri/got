@@ -8,7 +8,7 @@ public class Alerter {
     }
 
     public static void showError(String message, String title) {
-        alertService.setAlert(AlertType.ERROR);
+        alertService.changeCurrentAlert(AlertType.ERROR);
         alertService.alert(message, title);
     }
 
@@ -17,7 +17,7 @@ public class Alerter {
     }
 
     public static void showSuccess(String message, String title) {
-        alertService.setAlert(AlertType.SUCCESS);
+        alertService.changeCurrentAlert(AlertType.SUCCESS);
         alertService.alert(message, title);
     }
 }

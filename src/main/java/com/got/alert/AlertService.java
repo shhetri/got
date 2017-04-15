@@ -20,7 +20,7 @@ class AlertService {
         currentAlert.alert(message, title);
     }
 
-    void setAlert(AlertType alert) {
+    void changeCurrentAlert(AlertType alert) {
         currentAlert = alertStates.get(alert);
     }
 }
