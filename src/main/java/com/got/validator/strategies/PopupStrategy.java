@@ -1,14 +1,14 @@
-package com.got.validator.rules;
+package com.got.validator.strategies;
 
-import javafx.scene.control.Alert;
+import com.got.alert.Alerter;
+import com.got.validator.contracts.AlertStrategy;
 import javafx.scene.control.Control;
 
 public class PopupStrategy implements AlertStrategy {
 
     @Override
     public void display(Control control, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR, message);
-        alert.show();
+        Alerter.showError(message);
     }
 
     @Override

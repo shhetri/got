@@ -1,5 +1,6 @@
-package com.got.validator.rules;
+package com.got.validator.strategies;
 
+import com.got.validator.contracts.AlertStrategy;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 

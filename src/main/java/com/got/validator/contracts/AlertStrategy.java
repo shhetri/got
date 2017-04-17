@@ -1,4 +1,4 @@
-package com.got.validator.rules;
+package com.got.validator.contracts;
 
 import javafx.scene.control.Control;
 

@@ -1,15 +1,12 @@
 package com.got.validator.rules;
 
+import com.got.validator.ValidationType;
 import javafx.scene.control.Control;
-import javafx.scene.control.TextField;
 
 public class RequiredValidator extends ValidatorBase {
 
     public RequiredValidator(Control control, String message, ValidationType validationType) {
-        this.setText(((TextField)control).getText());
-        this.setMessage(message);
-        this.setControl(control);
-        this.setValidationType(validationType);
+        super(control, message, validationType);
     }
 
     @Override

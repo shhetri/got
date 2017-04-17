@@ -1,5 +1,6 @@
-package com.got.validator.rules;
+package com.got.validator;
 
+import com.got.validator.rules.ValidatorBase;
 import javafx.scene.control.Control;
 
 import java.util.*;
@@ -7,20 +8,21 @@ import java.util.*;
 public class Validator {
 
     private HashMap<Control, List<ValidatorBase>> fieldRules = new LinkedHashMap<>();
-    private ValidationType validationType = ValidationType.INLINE;
+    private ValidationType validationType = ValidationType.POPUP;
 
     public void addRules(Control control, String rules, String messages) {
         List<ValidatorBase> rulesAndMessages = new ArrayList<>();
         String[] ruleSet = rules.split("\\|");
         String[] messageSet = messages.split("\\|");
 
-        for(int i=0; i<ruleSet.length && i<messageSet.length; i++) {
-            String message = messageSet[i];
-            if(ruleSet[i].equals("alphanumeric")) {
-                rulesAndMessages.add(new AlphaNumericValidator(control, message, validationType));
-            } else if(ruleSet[i].equals("required")) {
-                rulesAndMessages.add(new RequiredValidator(control, message, validationType));
+        for(int i=0; i<ruleSet.length; i++) {
+            String message = "";
+            if(i>=messageSet.length){
+                message = ValidatorFactory.getMessage(ruleSet[i]);
+            } else {
+                message = messageSet[i];
             }
+            rulesAndMessages.add(ValidatorFactory.getValidator(ruleSet[i], control, message, validationType));
         }
         fieldRules.put(control, rulesAndMessages);
     }

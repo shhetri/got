@@ -1,5 +1,8 @@
 package com.got.validator.rules;
 
+import com.got.validator.TextRetriever;
+import com.got.validator.ValidationMessage;
+import com.got.validator.ValidationType;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.scene.control.Control;
 
@@ -11,14 +14,12 @@ public abstract class ValidatorBase {
     private ValidationType validationType = ValidationType.POPUP;
     private Control control;
 
-    public ValidationType getValidationType() {
-        return validationType;
-    }
-
-    public void setValidationType(ValidationType validationType) {
+    public ValidatorBase(Control control, String message, ValidationType validationType) {
+        this.message = message;
         this.validationType = validationType;
+        this.control = control;
+        this.text = TextRetriever.retrieve(control);
     }
-
 
     // Template Method Design Pattern
     public final boolean validate() {
@@ -38,29 +39,9 @@ public abstract class ValidatorBase {
         }
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
     protected abstract void evaluateRules();
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Control getControl() {
-        return control;
-    }
-
-    public void setControl(Control control) {
-        this.control = control;
+    public String getText() {
+        return text;
     }
 }

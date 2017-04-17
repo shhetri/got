@@ -1,5 +1,8 @@
-package com.got.validator.rules;
+package com.got.validator;
 
+import com.got.validator.contracts.AlertStrategy;
+import com.got.validator.strategies.InlineStrategy;
+import com.got.validator.strategies.PopupStrategy;
 import javafx.scene.control.Control;
 
 import java.util.HashMap;
