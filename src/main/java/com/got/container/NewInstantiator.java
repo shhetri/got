@@ -25,6 +25,7 @@ class NewInstantiator extends AbstractInstantiator {
                     concrete = build(clazz);
                 }
 
+                concrete = (T) container.wrapProxy(clazz, concrete);
                 updateInstances(clazz, concrete, concreteMappingEntry);
                 container.passContainer(concrete);
             } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
