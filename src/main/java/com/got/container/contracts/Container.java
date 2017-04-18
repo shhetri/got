@@ -1,5 +1,7 @@
 package com.got.container.contracts;
 
+import com.got.proxy.contracts.Proxy;
+
 import java.io.Serializable;
 
 public interface Container {
@@ -12,4 +14,6 @@ public interface Container {
     void prototype(Class<? extends Serializable> placeHolder);
 
     <T> T make(Class<T> placeHolder);
+
+    void registerProxy(Class<? extends Proxy> proxy, Class<?>... classes);
 }

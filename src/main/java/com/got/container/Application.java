@@ -3,12 +3,12 @@ package com.got.container;
 import com.got.container.contracts.Container;
 import com.got.container.contracts.ContainerAware;
 import com.got.container.contracts.Instantiator;
+import com.got.proxy.contracts.Proxy;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 public class Application implements Container, Serializable {
     private static Application instance = null;
@@ -16,6 +16,7 @@ public class Application implements Container, Serializable {
     private final Map<Class<?>, Object> singletonInstances = new HashMap<>();
     private final Map<Class<?>, Object> prototypeInstances = new HashMap<>();
     private final List<Class<?>> prototypeBindings = new ArrayList<>();
+    private final Map<Class<? extends Proxy>, List<Class<?>>> proxyMappings = new HashMap<>();
 
     private Application() {
 
@@ -83,9 +84,31 @@ public class Application implements Container, Serializable {
         return instantiator.instantiate(placeHolder);
     }
 
+    @Override
+    public void registerProxy(Class<? extends Proxy> proxy, Class<?>... classes) {
+        List<Class<?>> classesToBeProxied = Arrays.asList(classes);
+
+        proxyMappings.put(proxy, classesToBeProxied);
+    }
+
     <T> void passContainer(T concrete) {
         if (concrete instanceof ContainerAware) {
             ((ContainerAware) concrete).setContainer(this);
         }
+    }
+
+    <T> Object wrapProxy(Class<T> clazz, T concrete) {
+        for (Map.Entry<Class<? extends Proxy>, List<Class<?>>> pair : proxyMappings.entrySet()) {
+            if (pair.getValue().contains(clazz)) {
+                try {
+                    Class<? extends Proxy> proxy = pair.getKey();
+                    return java.lang.reflect.Proxy.newProxyInstance(concrete.getClass().getClassLoader(), concrete.getClass().getInterfaces(), (InvocationHandler) proxy.getConstructors()[0].newInstance(concrete));
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return concrete;
     }
 }
