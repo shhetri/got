@@ -22,13 +22,7 @@ public class DBConnector {
                                 host +
                                 ":" + port + "/" + database,
                         connectionProps);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
+            } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
             }
         } else if (databaseType.equals(DatabaseType.DERBY)) {
@@ -39,16 +33,11 @@ public class DBConnector {
                                 port + "/" + database +
                                 ";create=true",
                         connectionProps);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (SQLException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
+
         return connection;
     }
 
