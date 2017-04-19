@@ -3,6 +3,11 @@ package com.got.container;
 import com.got.container.contracts.Container;
 import com.got.container.contracts.ContainerAware;
 import com.got.container.contracts.Instantiator;
+import com.got.event.Dispatcher;
+import com.got.event.contracts.EventDispatcher;
+import com.got.filestorage.File;
+import com.got.filestorage.contracts.IFile;
+import com.got.proxy.CallbackProxy;
 import com.got.proxy.contracts.Proxy;
 
 import java.io.Serializable;
@@ -89,6 +94,13 @@ public class Application implements Container, Serializable {
         List<Class<?>> classesToBeProxied = Arrays.asList(classes);
 
         proxyMappings.put(proxy, classesToBeProxied);
+    }
+
+    @Override
+    public void bindDefaultBindings() {
+        bind(EventDispatcher.class, Dispatcher.class);
+        bind(IFile.class, File.class);
+        bind(Proxy.class, CallbackProxy.class);
     }
 
     <T> void passContainer(T concrete) {

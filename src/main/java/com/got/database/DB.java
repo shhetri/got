@@ -16,6 +16,15 @@ import java.util.List;
 import java.util.Map;
 
 public class DB {
+    public static DBInfo table(String tableName) {
+        DBInfo.tableName = tableName;
+        DBInfo.selectionQuery = "SELECT * FROM " + tableName;
+        DBInfo.deletionQuery = "DELETE FROM " + tableName;
+        DBInfo.insertionQuery = "INSERT INTO " + tableName;
+        DBInfo.updationQuery = "UPDATE " + tableName;
+
+        return new DBInfo();
+    }
 
     public static class DBInfo {
         public static String tableName;
@@ -65,7 +74,7 @@ public class DB {
             List<T> resultList = new ArrayList<T>();
 
             try {
-                while(resultSet.next()) {
+                while (resultSet.next()) {
                     Container container = ContainerFactory.getDefaultContainer();
                     T object = container.make(clazz);
 
@@ -73,7 +82,7 @@ public class DB {
                     int columnCount = rsmd.getColumnCount();
 
                     // The column count starts from 1
-                    for (int i = 1; i <= columnCount; i++ ) {
+                    for (int i = 1; i <= columnCount; i++) {
                         String name = rsmd.getColumnName(i);
                         name = StringHelper.generateSetter(name);
                         try {
@@ -104,13 +113,13 @@ public class DB {
         public DBInfo values(HashMap<String, String> insertionParameters) {
             insertionQuery += " (";
             String valuesQuery = ") VALUES (";
-            for(Map.Entry<String, String> insertionParameter: insertionParameters.entrySet()) {
+            for (Map.Entry<String, String> insertionParameter : insertionParameters.entrySet()) {
                 insertionQuery += insertionParameter.getKey() + ",";
                 valuesQuery += "?,";
                 parameters.add(insertionParameter.getValue());
             }
-            insertionQuery = insertionQuery.substring(0, insertionQuery.length()-1);
-            valuesQuery = valuesQuery.substring(0, valuesQuery.length()-1);
+            insertionQuery = insertionQuery.substring(0, insertionQuery.length() - 1);
+            valuesQuery = valuesQuery.substring(0, valuesQuery.length() - 1);
             valuesQuery += ")";
             insertionQuery += valuesQuery;
 
@@ -118,62 +127,37 @@ public class DB {
         }
 
         public int insert() {
-            try(PreparedStatement preparedStatement = DBConnector.connection.prepareStatement(insertionQuery)) {
-
-                for (int i = 1; i <= parameters.size(); i++)
-                    preparedStatement.setString(i, parameters.get(i - 1));
-                parameters.clear();
-                return preparedStatement.executeUpdate();
-
-            } catch (SQLException e) {
-
-                e.printStackTrace();
-
-            }
-
-            return 0;
+            return execute(insertionQuery);
         }
 
         public DBInfo set(HashMap<String, String> updateParameters) {
             updationQuery += " SET ";
-            for(Map.Entry<String, String> updateParameter: updateParameters.entrySet()) {
+            for (Map.Entry<String, String> updateParameter : updateParameters.entrySet()) {
                 updationQuery += updateParameter.getKey() + "=?,";
                 parameters.add(updateParameter.getValue());
             }
-            updationQuery = updationQuery.substring(0, updationQuery.length()-1);
+            updationQuery = updationQuery.substring(0, updationQuery.length() - 1);
 
             return this;
         }
 
         public int update() {
-            try(PreparedStatement preparedStatement = DBConnector.connection.prepareStatement(updationQuery)) {
-
-                for (int i = 1; i <= parameters.size(); i++)
-                    preparedStatement.setString(i, parameters.get(i - 1));
-                parameters.clear();
-                return preparedStatement.executeUpdate();
-
-            } catch (SQLException e) {
-
-                e.printStackTrace();
-
-            }
-
-            return 0;
+            return execute(updationQuery);
         }
 
         public int delete() {
-            try(PreparedStatement preparedStatement = DBConnector.connection.prepareStatement(deletionQuery)) {
+            return execute(deletionQuery);
+        }
 
+        private int execute(String query) {
+            try (PreparedStatement preparedStatement = DBConnector.connection.prepareStatement(query)) {
                 for (int i = 1; i <= parameters.size(); i++)
                     preparedStatement.setString(i, parameters.get(i - 1));
                 parameters.clear();
                 return preparedStatement.executeUpdate();
 
             } catch (SQLException e) {
-
                 e.printStackTrace();
-
             }
 
             return 0;
@@ -226,15 +210,4 @@ public class DB {
             return this;
         }
     }
-
-    public static DBInfo table(String tableName) {
-        DBInfo.tableName = tableName;
-        DBInfo.selectionQuery = "SELECT * FROM " + tableName;
-        DBInfo.deletionQuery = "DELETE FROM " + tableName;
-        DBInfo.insertionQuery = "INSERT INTO " + tableName;
-        DBInfo.updationQuery = "UPDATE " + tableName;
-
-        return new DBInfo();
-    }
-
 }

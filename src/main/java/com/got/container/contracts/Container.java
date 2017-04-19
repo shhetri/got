@@ -16,4 +16,6 @@ public interface Container {
     <T> T make(Class<T> placeHolder);
 
     void registerProxy(Class<? extends Proxy> proxy, Class<?>... classes);
+
+    void bindDefaultBindings();
 }
