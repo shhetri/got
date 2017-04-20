@@ -6,12 +6,13 @@ import com.got.validator.strategies.PopupStrategy;
 import javafx.scene.control.Control;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ValidationMessage {
 
     Control control;
     String message;
-    HashMap<ValidationType, AlertStrategy> alertStrategies = new HashMap<ValidationType, AlertStrategy>(){
+    Map<ValidationType, AlertStrategy> alertStrategies = new HashMap<ValidationType, AlertStrategy>(){
         {
             put(ValidationType.POPUP, new PopupStrategy());
             put(ValidationType.INLINE, new InlineStrategy());

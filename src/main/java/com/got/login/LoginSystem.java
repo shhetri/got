@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class LoginSystem implements LoginSystemInterface {
 
@@ -17,7 +18,7 @@ public class LoginSystem implements LoginSystemInterface {
     private String successView;
     private LoginMethod loginMethod = LoginMethod.DATABASE;
     private String appName = "Login System";
-    private HashMap<String, String> roleViews = new HashMap<>();
+    private Map<String, String> roleViews = new HashMap<>();
 
     public LoginSystem() {
         Container container = ContainerFactory.getDefaultContainer();
@@ -48,7 +49,7 @@ public class LoginSystem implements LoginSystemInterface {
         window.open();
     }
 
-    public void launch(Stage primaryStage, String appName, HashMap<String, String> roleViews) {
+    public void launch(Stage primaryStage, String appName, Map<String, String> roleViews) {
 
         this.appName = appName;
         this.roleViews = roleViews;

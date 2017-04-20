@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LoginController implements DataReceivable {
 
@@ -28,11 +29,11 @@ public class LoginController implements DataReceivable {
     public String appName;
     public LoginMethod loginMethod;
     public String successView;
-    public HashMap<String, String> roleViews;
+    public Map<String, String> roleViews;
 
     public ActionEvent activeEvent;
 
-    HashMap<LoginMethod, Login> loginStrategies = new HashMap<LoginMethod, Login>(){{
+    Map<LoginMethod, Login> loginStrategies = new HashMap<LoginMethod, Login>(){{
         put(LoginMethod.DATABASE, new DatabaseLogin(LoginController.this));
         put(LoginMethod.FILE, new FileLogin(LoginController.this));
     }};
@@ -57,7 +58,7 @@ public class LoginController implements DataReceivable {
         appName = (String) objects.get(0);
         loginMethod = (LoginMethod) objects.get(1);
         successView = (String) objects.get(2);
-        roleViews = (HashMap<String, String>) objects.get(3);
+        roleViews = (Map<String, String>) objects.get(3);
         if (appTitle != null)
             appTitle.setText(appName);
     }

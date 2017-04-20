@@ -7,17 +7,18 @@ import javafx.scene.control.Control;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ValidatorFactory {
 
-    static HashMap<String, Class> validators = new HashMap<String, Class>() {
+    static Map<String, Class> validators = new HashMap<String, Class>() {
         {
             put("alphanumeric", AlphaNumericValidator.class);
             put("required", RequiredValidator.class);
         }
     };
 
-    static HashMap<String, String> messages = new HashMap<String, String>() {
+    static Map<String, String> messages = new HashMap<String, String>() {
         {
             put("alphanumeric", "This field must be alphanumeric!");
             put("required", "This field must be alphanumeric!");

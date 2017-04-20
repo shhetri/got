@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Validator {
 
-    private HashMap<Control, List<ValidatorBase>> fieldRules = new LinkedHashMap<>();
+    private Map<Control, List<ValidatorBase>> fieldRules = new LinkedHashMap<>();
     private ValidationType validationType = ValidationType.POPUP;
 
     public void addRules(Control control, String rules, String messages) {
