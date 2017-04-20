@@ -43,8 +43,8 @@ public class File implements IFile {
             Path absolutePath = FileSystems.getDefault().getPath(STORAGE_PATH, getDirectory(type), filename);
             in = new ObjectInputStream(Files.newInputStream(absolutePath));
             object = type.cast(in.readObject());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+
         } finally {
             if (in != null) {
                 try {

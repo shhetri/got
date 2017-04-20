@@ -52,15 +52,11 @@ public class DB {
 
         public ResultSet get() {
             try {
-                System.out.println(selectionQuery);
-
                 PreparedStatement preparedStatement = DBConnector.connection.prepareStatement(selectionQuery);
 
                 for (int i = 1; i <= parameters.size(); i++)
                     preparedStatement.setString(i, parameters.get(i - 1));
                 parameters.clear();
-
-                System.out.println(preparedStatement);
 
                 return preparedStatement.executeQuery();
 

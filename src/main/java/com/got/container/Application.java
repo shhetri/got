@@ -26,7 +26,7 @@ public class Application implements Container, Serializable {
     private final Map<Class<? extends Proxy>, List<Class<?>>> proxyMappings = new HashMap<>();
 
     private Application() {
-
+        bindDefaultBindings();
     }
 
     static Application getInstance() {
@@ -98,8 +98,7 @@ public class Application implements Container, Serializable {
         proxyMappings.put(proxy, classesToBeProxied);
     }
 
-    @Override
-    public void bindDefaultBindings() {
+    private void bindDefaultBindings() {
         bind(EventDispatcher.class, Dispatcher.class);
         bind(IFile.class, File.class);
         bind(Proxy.class, CallbackProxy.class);

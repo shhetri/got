@@ -1,5 +1,8 @@
 package com.got.login;
 
+import com.got.container.ContainerFactory;
+import com.got.container.contracts.Container;
+import com.got.filestorage.contracts.IFile;
 import com.got.login.contracts.LoginSystemInterface;
 import com.got.window.Window;
 import com.got.window.contracts.WindowInterface;
@@ -15,6 +18,21 @@ public class LoginSystem implements LoginSystemInterface {
     private LoginMethod loginMethod = LoginMethod.DATABASE;
     private String appName = "Login System";
     private HashMap<String, String> roleViews = new HashMap<>();
+
+    public LoginSystem() {
+        Container container = ContainerFactory.getDefaultContainer();
+        IFile file = container.make(IFile.class);
+        LoginUser loginUser = file.retrieve("admin", LoginUser.class);
+        if(loginUser == null) {
+            loginUser = container.make(LoginUser.class);
+            loginUser.setId("1");
+            loginUser.setUsername("admin");
+            loginUser.setEmail("admin@domain.com");
+            loginUser.setPassword("admin");
+            loginUser.setRole("admin");
+            file.save(loginUser.getUsername(), loginUser);
+        }
+    }
 
     public void launch(Stage primaryStage, String appName, String successView) {
 
