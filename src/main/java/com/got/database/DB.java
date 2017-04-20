@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -114,7 +113,7 @@ public class DB {
             return null;
         }
 
-        public DBInfo values(HashMap<String, String> insertionParameters) {
+        public DBInfo values(Map<String, String> insertionParameters) {
             insertionQuery += " (";
             String valuesQuery = ") VALUES (";
             for (Map.Entry<String, String> insertionParameter : insertionParameters.entrySet()) {
@@ -134,7 +133,7 @@ public class DB {
             return execute(insertionQuery);
         }
 
-        public DBInfo set(HashMap<String, String> updateParameters) {
+        public DBInfo set(Map<String, String> updateParameters) {
             updationQuery += " SET ";
             for (Map.Entry<String, String> updateParameter : updateParameters.entrySet()) {
                 updationQuery += updateParameter.getKey() + "=?,";
@@ -174,12 +173,11 @@ public class DB {
         }
 
         public DBInfo where(String key, String value) {
-            if(selectionQuery.contains("WHERE") || deletionQuery.contains("WHERE") || updationQuery.contains("WHERE")) {
+            if (selectionQuery.contains("WHERE") || deletionQuery.contains("WHERE") || updationQuery.contains("WHERE")) {
                 selectionQuery += key + "=?";
                 deletionQuery += key + "=?";
                 updationQuery += key + "=?";
-            }
-            else {
+            } else {
                 selectionQuery += " WHERE " + key + "=?";
                 deletionQuery += " WHERE " + key + "=?";
                 updationQuery += " WHERE " + key + "=?";
