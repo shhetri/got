@@ -15,6 +15,7 @@ public class Window implements WindowInterface {
     private Node component;
     private String title;
     private boolean closePrevious;
+    private boolean hidePrevious;
     private boolean isResizeable;
     private boolean showAndWait;
     private Object data;
@@ -25,6 +26,7 @@ public class Window implements WindowInterface {
         component = builder.component;
         title = builder.title;
         closePrevious = builder.closePrevious;
+        hidePrevious = builder.hidePrevious;
         isResizeable = builder.isResizeable;
         showAndWait = builder.showAndWait;
         data = builder.data;
@@ -42,6 +44,11 @@ public class Window implements WindowInterface {
             if (data != null) {
                 DataReceivable controller = loader.getController();
                 controller.receive(data);
+            }
+
+            if (hidePrevious) {
+                Stage previousStage = (Stage) component.getScene().getWindow();
+                previousStage.hide();
             }
 
             if (closePrevious) {
@@ -69,6 +76,7 @@ public class Window implements WindowInterface {
         private Node component;
         private String title = "";
         private boolean closePrevious = false;
+        private boolean hidePrevious = false;
         private boolean isResizeable = false;
         private boolean showAndWait = false;
         private Object data;
@@ -98,6 +106,13 @@ public class Window implements WindowInterface {
 
         public WindowBuilder closePreviousWindow(Node component) {
             this.closePrevious = true;
+            this.component = component;
+
+            return this;
+        }
+
+        public WindowBuilder hidePreviousWindow(Node component) {
+            this.hidePrevious = true;
             this.component = component;
 
             return this;
