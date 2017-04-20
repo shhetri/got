@@ -1,16 +1,12 @@
 package com.got.login.controller;
 
-import com.got.alert.Alerter;
-import com.got.database.DB;
-import com.got.database.DBConnector;
-import com.got.database.DatabaseType;
 import com.got.login.LoginMethod;
-import com.got.login.LoginUser;
-import com.got.window.Window;
+import com.got.login.strategies.DatabaseLogin;
+import com.got.login.strategies.FileLogin;
+import com.got.login.strategies.Login;
 import com.got.window.contracts.DataReceivable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -21,52 +17,32 @@ import java.util.List;
 public class LoginController implements DataReceivable {
 
     @FXML
-    private TextField idField;
+    public TextField idField;
 
     @FXML
-    private PasswordField passwordField;
+    public PasswordField passwordField;
 
     @FXML
-    private Label appTitle;
+    public Label appTitle;
 
-    private String appName;
-    private LoginMethod loginMethod;
-    private String successView;
-    private HashMap<String, String> roleViews;
+    public String appName;
+    public LoginMethod loginMethod;
+    public String successView;
+    public HashMap<String, String> roleViews;
+
+    public ActionEvent activeEvent;
+
+    HashMap<LoginMethod, Login> loginStrategies = new HashMap<LoginMethod, Login>(){{
+        put(LoginMethod.DATABASE, new DatabaseLogin(LoginController.this));
+        put(LoginMethod.FILE, new FileLogin(LoginController.this));
+    }};
 
     @FXML
     void login(ActionEvent event) {
-        if (loginMethod.equals(LoginMethod.DATABASE)) {
-            System.out.println("Logging in with database...");
+        activeEvent = event;
 
-            DBConnector.connect(DatabaseType.MYSQL, "localhost", "8889", "movieticketing", "root", "root");
-            LoginUser user = DB.table("users")
-                    .where(builder -> {
-                        return builder.where("username", idField.getText())
-                                .orWhere("email", idField.getText());
-                    })
-                    .andWhere("password", passwordField.getText())
-                    .getFirst(LoginUser.class);
+        loginStrategies.get(loginMethod).login();
 
-            if (user != null) {
-                if(roleViews.isEmpty()){
-                    Window window = Window.WindowBuilder.initialize().withView(successView).withTitle(appName).closePreviousWindow((Node) event.getSource()).build();
-                    window.open();
-
-                } else {
-                    Window window = Window.WindowBuilder.initialize().withView(roleViews.get(user.getRole())).withTitle(appName).closePreviousWindow((Node) event.getSource()).build();
-                    window.open();
-
-                }
-
-            } else {
-                Alerter.showError("Invalid Login Credentials!");
-            }
-
-        } else {
-            System.out.println("Logging in with file...");
-
-        }
     }
 
     @FXML

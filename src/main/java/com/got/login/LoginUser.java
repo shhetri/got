@@ -1,7 +1,10 @@
 package com.got.login;
 
-public class LoginUser {
+import java.io.Serializable;
 
+public class LoginUser implements Serializable {
+
+    private static final long serialVersionUID = 7230153359200617020L;
     private String id;
     private String username;
     private String email;
