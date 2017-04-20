@@ -2,7 +2,7 @@ package com.got.window;
 
 public final class WindowViewResolver {
     private static WindowViewResolver instance = null;
-    private String rootView;
+    private String rootView = "";
 
     private WindowViewResolver() {
     }

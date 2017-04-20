@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class DB {
     public static DBInfo table(String tableName) {
@@ -51,11 +52,15 @@ public class DB {
 
         public ResultSet get() {
             try {
+                System.out.println(selectionQuery);
+
                 PreparedStatement preparedStatement = DBConnector.connection.prepareStatement(selectionQuery);
 
                 for (int i = 1; i <= parameters.size(); i++)
                     preparedStatement.setString(i, parameters.get(i - 1));
                 parameters.clear();
+
+                System.out.println(preparedStatement);
 
                 return preparedStatement.executeQuery();
 
@@ -107,7 +112,10 @@ public class DB {
         }
 
         public <T> T getFirst(Class<T> clazz) {
-            return get(clazz).get(0);
+            List<T> result = get(clazz);
+            if (result.size() > 0)
+                return result.get(0);
+            return null;
         }
 
         public DBInfo values(HashMap<String, String> insertionParameters) {
@@ -170,10 +178,29 @@ public class DB {
         }
 
         public DBInfo where(String key, String value) {
-            selectionQuery += " WHERE " + key + "=?";
-            deletionQuery += " WHERE " + key + "=?";
-            updationQuery += " WHERE " + key + "=?";
+            if(selectionQuery.contains("WHERE") || deletionQuery.contains("WHERE") || updationQuery.contains("WHERE")) {
+                selectionQuery += key + "=?";
+                deletionQuery += key + "=?";
+                updationQuery += key + "=?";
+            }
+            else {
+                selectionQuery += " WHERE " + key + "=?";
+                deletionQuery += " WHERE " + key + "=?";
+                updationQuery += " WHERE " + key + "=?";
+            }
             parameters.add(value);
+
+            return this;
+        }
+
+        public DBInfo where(Function<DBInfo, DBInfo> builder) {
+            selectionQuery += " WHERE (";
+            deletionQuery += " WHERE (";
+            updationQuery += " WHERE (";
+            builder.apply(this);
+            selectionQuery += ")";
+            deletionQuery += ")";
+            updationQuery += ")";
 
             return this;
         }

@@ -7,6 +7,8 @@ import com.got.event.Dispatcher;
 import com.got.event.contracts.EventDispatcher;
 import com.got.filestorage.File;
 import com.got.filestorage.contracts.IFile;
+import com.got.login.LoginSystem;
+import com.got.login.contracts.LoginSystemInterface;
 import com.got.proxy.CallbackProxy;
 import com.got.proxy.contracts.Proxy;
 
@@ -101,6 +103,7 @@ public class Application implements Container, Serializable {
         bind(EventDispatcher.class, Dispatcher.class);
         bind(IFile.class, File.class);
         bind(Proxy.class, CallbackProxy.class);
+        bind(LoginSystemInterface.class, LoginSystem.class);
     }
 
     <T> void passContainer(T concrete) {
