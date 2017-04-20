@@ -46,7 +46,7 @@ public class LoginSystem implements LoginSystemInterface {
                 .passData(new ArrayList<Object>(){{add(appName); add(loginMethod); add(successView); add(roleViews);}})
                 .build();
 
-        window.open();
+        LoginWindow.INSTANCE.setStage(window.open());
     }
 
     public void launch(Stage primaryStage, String appName, Map<String, String> roleViews) {
@@ -61,7 +61,7 @@ public class LoginSystem implements LoginSystemInterface {
                 .passData(new ArrayList<Object>(){{add(appName); add(loginMethod); add(successView); add(roleViews); }})
                 .build();
 
-        window.open();
+        LoginWindow.INSTANCE.setStage(window.open());
     }
 
     public void setView(String view) {

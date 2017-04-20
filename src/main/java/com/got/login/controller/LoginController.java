@@ -7,6 +7,7 @@ import com.got.login.strategies.Login;
 import com.got.window.contracts.DataReceivable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -25,6 +26,12 @@ public class LoginController implements DataReceivable {
 
     @FXML
     public Label appTitle;
+
+    @FXML
+    public Button loginBtn;
+
+    @FXML
+    public Button resetBtn;
 
     public String appName;
     public LoginMethod loginMethod;

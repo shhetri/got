@@ -4,6 +4,7 @@ import com.got.alert.Alerter;
 import com.got.database.DB;
 import com.got.login.LoggedInUser;
 import com.got.login.LoginUser;
+import com.got.login.LoginWindow;
 import com.got.login.controller.LoginController;
 import com.got.window.Window;
 import javafx.scene.Node;
@@ -28,16 +29,17 @@ public class DatabaseLogin implements Login {
 
         if (user != null) {
             LoggedInUser.getInstance().setUser(user);
+            Window window = Window.WindowBuilder.initialize()
+                    .withView(loginController.roleViews.isEmpty() ? loginController.successView : loginController.roleViews.get(user.getRole()))
+                    .withTitle(loginController.appName)
+                    .hidePreviousWindow((Node) loginController.activeEvent.getSource())
+                    .shouldShowAndWait(true)
+                    .build();
 
-            if(loginController.roleViews.isEmpty()){
-                Window window = Window.WindowBuilder.initialize().withView(loginController.successView).withTitle(loginController.appName).closePreviousWindow((Node) loginController.activeEvent.getSource()).build();
-                window.open();
+            window.open();
 
-            } else {
-                Window window = Window.WindowBuilder.initialize().withView(loginController.roleViews.get(user.getRole())).withTitle(loginController.appName).closePreviousWindow((Node) loginController.activeEvent.getSource()).build();
-                window.open();
-
-            }
+            loginController.resetBtn.fire();
+            LoginWindow.INSTANCE.getStage().show();
 
         } else {
             Alerter.showError("Invalid Login Credentials!");
