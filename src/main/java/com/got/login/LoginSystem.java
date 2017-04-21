@@ -5,7 +5,6 @@ import com.got.container.contracts.Container;
 import com.got.filestorage.contracts.IFile;
 import com.got.login.contracts.LoginSystemInterface;
 import com.got.window.Window;
-import com.got.window.contracts.WindowInterface;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class LoginSystem implements LoginSystemInterface {
         Container container = ContainerFactory.getDefaultContainer();
         IFile file = container.make(IFile.class);
         LoginUser loginUser = file.retrieve("admin", LoginUser.class);
-        if(loginUser == null) {
+        if (loginUser == null) {
             loginUser = container.make(LoginUser.class);
             loginUser.setId("1");
             loginUser.setUsername("admin");
@@ -36,17 +35,11 @@ public class LoginSystem implements LoginSystemInterface {
     }
 
     public void launch(Stage primaryStage, String appName, String successView) {
-
-        this.appName = appName;
-
-        WindowInterface window = Window.WindowBuilder
-                .initialize()
-                .withView(view).withTitle(appName)
-                .setStage(primaryStage)
-                .passData(new ArrayList<Object>(){{add(appName); add(loginMethod); add(successView); add(roleViews);}})
-                .build();
-
-        LoginWindow.INSTANCE.setStage(window.open());
+        launch(primaryStage, appName, new HashMap<String, String>() {
+            {
+                put(null, successView);
+            }
+        });
     }
 
     public void launch(Stage primaryStage, String appName, Map<String, String> roleViews) {
@@ -54,14 +47,18 @@ public class LoginSystem implements LoginSystemInterface {
         this.appName = appName;
         this.roleViews = roleViews;
 
-        WindowInterface window = Window.WindowBuilder
+        Window.WindowBuilder
                 .initialize()
                 .withView(view).withTitle(appName)
                 .setStage(primaryStage)
-                .passData(new ArrayList<Object>(){{add(appName); add(loginMethod); add(successView); add(roleViews); }})
-                .build();
-
-        LoginWindow.INSTANCE.setStage(window.open());
+                .passData(new ArrayList<Object>() {{
+                    add(appName);
+                    add(loginMethod);
+                    add(successView);
+                    add(roleViews);
+                }})
+                .build()
+                .open();
     }
 
     public void setView(String view) {
