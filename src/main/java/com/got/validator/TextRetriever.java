@@ -21,6 +21,8 @@ public class TextRetriever {
             if (date != null) {
                 return date.format(DateTimeFormatter.ofPattern("MM-dd-yyyy"));
             }
+        } else if (control instanceof ComboBox) {
+            return ((ComboBox<String>)control).getSelectionModel().getSelectedItem();
         }
 
         return null;
