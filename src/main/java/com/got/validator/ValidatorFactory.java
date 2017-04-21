@@ -1,8 +1,6 @@
 package com.got.validator;
 
-import com.got.validator.rules.AlphaNumericValidator;
-import com.got.validator.rules.RequiredValidator;
-import com.got.validator.rules.ValidatorBase;
+import com.got.validator.rules.*;
 import javafx.scene.control.Control;
 
 import java.lang.reflect.InvocationTargetException;
@@ -15,6 +13,8 @@ public class ValidatorFactory {
         {
             put("alphanumeric", AlphaNumericValidator.class);
             put("required", RequiredValidator.class);
+            put("number", NumberValidator.class);
+            put("time", TimeValidator.class);
         }
     };
 
@@ -22,6 +22,8 @@ public class ValidatorFactory {
         {
             put("alphanumeric", "This field must be alphanumeric!");
             put("required", "This field must be alphanumeric!");
+            put("number", "This field must consist number!");
+            put("time", "This field must be a valid time in HH:MM format!");
         }
     };
 

@@ -3,7 +3,10 @@ package com.got.validator;
 import com.got.validator.rules.ValidatorBase;
 import javafx.scene.control.Control;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Validator {
 
@@ -15,9 +18,9 @@ public class Validator {
         String[] ruleSet = rules.split("\\|");
         String[] messageSet = messages.split("\\|");
 
-        for(int i=0; i<ruleSet.length; i++) {
+        for (int i = 0; i < ruleSet.length; i++) {
             String message = "";
-            if(i>=messageSet.length){
+            if (i >= messageSet.length) {
                 message = ValidatorFactory.getMessage(ruleSet[i]);
             } else {
                 message = messageSet[i];
@@ -27,14 +30,16 @@ public class Validator {
         fieldRules.put(control, rulesAndMessages);
     }
 
-    public void validate() {
-        for(Map.Entry<Control, List<ValidatorBase>> entry: fieldRules.entrySet()) {
-            for(ValidatorBase validatorBase: entry.getValue()) {
-                if(validatorBase.validate()) {
-                    return;
+    public boolean validate() {
+        for (Map.Entry<Control, List<ValidatorBase>> entry : fieldRules.entrySet()) {
+            for (ValidatorBase validatorBase : entry.getValue()) {
+                if (validatorBase.validate()) {
+                    return false;
                 }
             }
         }
+
+        return true;
     }
 
     public ValidationType getValidationType() {
