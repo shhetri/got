@@ -1,9 +1,12 @@
 package com.got.login.controller;
 
+import com.got.container.ContainerFactory;
 import com.got.login.LoginMethod;
 import com.got.login.strategies.DatabaseLogin;
 import com.got.login.strategies.FileLogin;
 import com.got.login.strategies.Login;
+import com.got.validator.ValidationType;
+import com.got.validator.Validator;
 import com.got.window.contracts.DataReceivable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,6 +41,8 @@ public class LoginController implements DataReceivable {
     public String successView;
     public Map<String, String> roleViews;
 
+    private ValidationType validationType;
+
     public ActionEvent activeEvent;
 
     Map<LoginMethod, Login> loginStrategies = new HashMap<LoginMethod, Login>(){{
@@ -49,7 +54,13 @@ public class LoginController implements DataReceivable {
     void login(ActionEvent event) {
         activeEvent = event;
 
-        loginStrategies.get(loginMethod).login();
+        Validator validator = ContainerFactory.getDefaultContainer().make(Validator.class);
+        validator.setValidationType(validationType);
+        validator.addRules(idField, "required|alphanumeric", "Username/Email is required|Username/Email must be alphanumeric");
+        validator.addRules(passwordField, "required", "Password is required");
+
+        if(validator.validate())
+            loginStrategies.get(loginMethod).login();
 
     }
 
@@ -66,6 +77,7 @@ public class LoginController implements DataReceivable {
         loginMethod = (LoginMethod) objects.get(1);
         successView = (String) objects.get(2);
         roleViews = (Map<String, String>) objects.get(3);
+        validationType = (ValidationType) objects.get(4);
         if (appTitle != null)
             appTitle.setText(appName);
     }

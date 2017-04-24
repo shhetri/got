@@ -4,6 +4,7 @@ import com.got.container.ContainerFactory;
 import com.got.container.contracts.Container;
 import com.got.filestorage.contracts.IFile;
 import com.got.login.contracts.LoginSystemInterface;
+import com.got.validator.ValidationType;
 import com.got.window.Window;
 import javafx.stage.Stage;
 
@@ -18,6 +19,7 @@ public class LoginSystem implements LoginSystemInterface {
     private LoginMethod loginMethod = LoginMethod.DATABASE;
     private String appName = "Login System";
     private Map<String, String> roleViews = new HashMap<>();
+    private ValidationType validationType = ValidationType.INLINE;
 
     public LoginSystem() {
         Container container = ContainerFactory.getDefaultContainer();
@@ -56,9 +58,15 @@ public class LoginSystem implements LoginSystemInterface {
                     add(loginMethod);
                     add(successView);
                     add(roleViews);
+                    add(validationType);
                 }})
                 .build()
                 .open();
+    }
+
+    @Override
+    public void setValidationType(ValidationType validationType) {
+        this.validationType = validationType;
     }
 
     public void setView(String view) {
